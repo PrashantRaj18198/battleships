@@ -1,0 +1,87 @@
+---
+version: "v1"
+appName: "myapp"
+image: "ghcr.io/argonautdev/battleship"
+imageTag: "latest"
+services:
+  - port: 80
+    protocol: "tls-terminated" # tls-passthrough, tls-terminated, tcp, http, grpc need to be supported
+    external:
+      hosts:
+        - "myapp.demo.argonaut.live"
+      # hostPort: 9000
+      paths: ["/"]
+argonaut:
+  env: demo
+  region: us-east-1
+  cluster: demo
+  imageRegistry: ghcr # corresponding to the image that is to be deployed
+  serviceType: "stateless" # One of {stateful, stateless, managed}
+persistentStorage: [] # Set to [] if no persistent storage is required
+replicas: 2
+minReplicas: 1
+maxReplicas: 8
+resources:
+  requests:
+    cpu: "100m"
+    memory: "200M"
+#########################################################################################
+# Everything below this is optional and advanced configuration                          #
+# and irrelevant in most scenarios.                                                     #
+#########################################################################################
+# Can only do one of the httpGet and exec handler methods for livenessProbe
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+  failureThreshold: 5
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+# Can only do one of the httpGet and exec handler methods for readinessProbe
+readinessProbe:
+  # Handler 1
+  httpGet:
+    path: /
+    port: 80
+  # Common fields
+  failureThreshold: 5
+  initialDelaySeconds: 10
+  successThreshold: 3
+  periodSeconds: 10
+  timeoutSeconds: 5
+externalServices: []
+podAnnotations: {}
+# additionals labels
+labels: {}
+# Allows you to load environment variables from kubernetes secret or config map
+envFrom: []
+secretMounts: []
+sidecarResources: {}
+updateStrategy: RollingUpdate
+# How long to wait for myapp to stop gracefully
+terminationGracePeriod: 30
+lifecycle: {}
+rbac:
+  create: false
+  serviceAccountAnnotations: {}
+  serviceAccountName: ""
+priorityClassName: ""
+antiAffinityTopologyKey: "kubernetes.io/hostname"
+antiAffinity: ""
+nodeAffinity: {}
+podManagementPolicy: "Parallel"
+podSecurityContext: {}
+securityContext: {}
+schedulerName: ""
+nodeSelector: {}
+tolerations: []
+initContainer:
+  enabled: false
+initResources: {}
+extraInitContainers: []
+extraVolumes: []
+extraVolumeMounts: []
+extraContainers: []
+extraConfig: []
+extraEnvs: []
