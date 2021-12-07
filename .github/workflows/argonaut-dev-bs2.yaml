@@ -4,7 +4,7 @@ name: "Build and Push to CR"
 on:
   push:
     branches:
-      - main
+      - pr-docker-context
     tags:
       - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
   workflow_dispatch:
@@ -31,7 +31,7 @@ jobs:
         id: build
         with:
           context: .
-          file: ./Dockerfile
+          file: ./server/Dockerfile
           push: false
           tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/argonaut/bs2:${{ steps.get_sha.outputs.SHA_SHORT }}
           outputs: type=docker,dest=image.tar
