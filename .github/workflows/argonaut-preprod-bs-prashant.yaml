@@ -11,8 +11,10 @@ on:
 
 jobs:
   build:
+    
     environment: 
       name: preprod 
+    
     runs-on: ubuntu-latest
     name: Build and Push Img
     steps:
@@ -54,8 +56,10 @@ jobs:
           docker_image_path: image.tar
 
   deploy:
+    
     environment: 
       name: preprod 
+    
     runs-on: ubuntu-latest
     name: Deploy to Argonaut
     needs: build
